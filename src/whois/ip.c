@@ -1,0 +1,318 @@
+#include "../../lib/liblpm/lpm.h"
+#include <stdint.h>
+#include <stdio.h>
+#include "whois.h"
+
+lpm_t *lpm_whois = NULL;
+
+/* initialize */
+static inline void whois_ip_add_mapping(const char *cidr, char *server) {
+    char buf[16];
+    size_t len;
+    uint32_t preflen;
+    if (0 != lpm_strtobin(cidr, buf, &len, &preflen)) {
+        fprintf(stderr, "[%s] parse cidr %s failed", __func__, cidr);
+        return;
+    }
+
+    if (0 != lpm_insert(lpm_whois, buf, len, preflen, server)) {
+        fprintf(stderr, "[%s] add cidr %s failed", __func__, cidr);
+        return;
+    }
+}
+
+void whois_ip_init(void) {
+    lpm_whois = lpm_create();
+    whois_ip_add_mapping("1.0.0.0/8", "whois.apnic.net");
+    whois_ip_add_mapping("2.0.0.0/8", "whois.ripe.net");
+    whois_ip_add_mapping("5.0.0.0/8", "whois.ripe.net");
+    whois_ip_add_mapping("14.0.0.0/8", "whois.apnic.net");
+    whois_ip_add_mapping("24.132.0.0/14", "whois.ripe.net");
+    whois_ip_add_mapping("27.0.0.0/8", "whois.apnic.net");
+    whois_ip_add_mapping("31.0.0.0/8", "whois.ripe.net");
+    whois_ip_add_mapping("36.0.0.0/8", "whois.apnic.net");
+    whois_ip_add_mapping("37.0.0.0/8", "whois.ripe.net");
+    whois_ip_add_mapping("39.0.0.0/8", "whois.apnic.net");
+    whois_ip_add_mapping("41.0.0.0/8", "whois.afrinic.net");
+    whois_ip_add_mapping("42.0.0.0/8", "whois.apnic.net");
+    whois_ip_add_mapping("43.224.0.0/11", "whois.apnic.net");
+    whois_ip_add_mapping("43.0.0.0/8", "whois.nic.ad.jp");
+    whois_ip_add_mapping("44.0.0.0/8", "whois.ampr.org");
+    whois_ip_add_mapping("46.0.0.0/8", "whois.ripe.net");
+    whois_ip_add_mapping("49.0.0.0/8", "whois.apnic.net");
+    whois_ip_add_mapping("51.0.0.0/8", "whois.ripe.net");
+    whois_ip_add_mapping("59.0.0.0/11", "whois.nic.or.kr");
+    whois_ip_add_mapping("58.0.0.0/7", "whois.apnic.net");
+    whois_ip_add_mapping("61.72.0.0/13", "whois.nic.or.kr");
+    whois_ip_add_mapping("61.80.0.0/14", "whois.nic.or.kr");
+    whois_ip_add_mapping("61.84.0.0/15", "whois.nic.or.kr");
+    whois_ip_add_mapping("61.112.0.0/12", "whois.nic.ad.jp");
+    whois_ip_add_mapping("61.192.0.0/12", "whois.nic.ad.jp");
+    whois_ip_add_mapping("61.208.0.0/13", "whois.nic.ad.jp");
+    whois_ip_add_mapping("60.0.0.0/7", "whois.apnic.net");
+    whois_ip_add_mapping("62.0.0.0/8", "whois.ripe.net");
+    whois_ip_add_mapping("77.0.0.0/8", "whois.ripe.net");
+    whois_ip_add_mapping("78.0.0.0/7", "whois.ripe.net");
+    whois_ip_add_mapping("80.0.0.0/4", "whois.ripe.net");
+    whois_ip_add_mapping("101.0.0.0/8", "whois.apnic.net");
+    whois_ip_add_mapping("102.0.0.0/8", "whois.afrinic.net");
+    whois_ip_add_mapping("103.0.0.0/8", "whois.apnic.net");
+    whois_ip_add_mapping("105.0.0.0/8", "whois.afrinic.net");
+    whois_ip_add_mapping("106.0.0.0/8", "whois.apnic.net");
+    whois_ip_add_mapping("109.0.0.0/8", "whois.ripe.net");
+    whois_ip_add_mapping("110.0.0.0/7", "whois.apnic.net");
+    whois_ip_add_mapping("112.160.0.0/11", "whois.nic.or.kr");
+    whois_ip_add_mapping("115.0.0.0/12", "whois.nic.or.kr");
+    whois_ip_add_mapping("115.16.0.0/13", "whois.nic.or.kr");
+    whois_ip_add_mapping("118.32.0.0/11", "whois.nic.or.kr");
+    whois_ip_add_mapping("119.192.0.0/11", "whois.nic.or.kr");
+    whois_ip_add_mapping("112.0.0.0/5", "whois.apnic.net");
+    whois_ip_add_mapping("121.128.0.0/10", "whois.nic.or.kr");
+    whois_ip_add_mapping("125.128.0.0/11", "whois.nic.or.kr");
+    whois_ip_add_mapping("120.0.0.0/6", "whois.apnic.net");
+    whois_ip_add_mapping("124.0.0.0/7", "whois.apnic.net");
+    whois_ip_add_mapping("126.0.0.0/8", "whois.apnic.net");
+    whois_ip_add_mapping("0.0.0.0/1", "whois.arin.net");
+    whois_ip_add_mapping("133.0.0.0/8", "whois.nic.ad.jp");
+    whois_ip_add_mapping("139.20.0.0/14", "whois.ripe.net");
+    whois_ip_add_mapping("139.24.0.0/14", "whois.ripe.net");
+    whois_ip_add_mapping("139.28.0.0/15", "whois.ripe.net");
+    whois_ip_add_mapping("141.0.0.0/10", "whois.ripe.net");
+    whois_ip_add_mapping("141.86.0.0/16", "whois.arin.net");
+    whois_ip_add_mapping("141.64.0.0/11", "whois.ripe.net");
+    whois_ip_add_mapping("141.96.0.0/14", "whois.ripe.net");
+    whois_ip_add_mapping("141.100.0.0/16", "whois.ripe.net");
+    whois_ip_add_mapping("145.0.0.0/8", "whois.ripe.net");
+    whois_ip_add_mapping("146.48.0.0/16", "whois.ripe.net");
+    whois_ip_add_mapping("149.202.0.0/15", "whois.ripe.net");
+    whois_ip_add_mapping("149.204.0.0/16", "whois.ripe.net");
+    whois_ip_add_mapping("149.206.0.0/15", "whois.ripe.net");
+    whois_ip_add_mapping("149.208.0.0/12", "whois.ripe.net");
+    whois_ip_add_mapping("149.224.0.0/12", "whois.ripe.net");
+    whois_ip_add_mapping("149.240.0.0/13", "whois.ripe.net");
+    whois_ip_add_mapping("149.248.0.0/14", "whois.ripe.net");
+    whois_ip_add_mapping("150.183.0.0/16", "whois.nic.or.kr");
+    whois_ip_add_mapping("150.254.0.0/16", "whois.ripe.net");
+    whois_ip_add_mapping("150.0.0.0/8", "whois.apnic.net");
+    whois_ip_add_mapping("151.0.0.0/10", "whois.ripe.net");
+    whois_ip_add_mapping("151.64.0.0/11", "whois.ripe.net");
+    whois_ip_add_mapping("151.96.0.0/14", "whois.ripe.net");
+    whois_ip_add_mapping("151.100.0.0/16", "whois.ripe.net");
+    whois_ip_add_mapping("153.128.0.0/9", "whois.nic.ad.jp");
+    whois_ip_add_mapping("153.0.0.0/8", "whois.apnic.net");
+    whois_ip_add_mapping("154.0.0.0/8", "whois.afrinic.net");
+    whois_ip_add_mapping("155.232.0.0/13", "whois.afrinic.net");
+    whois_ip_add_mapping("155.240.0.0/16", "whois.afrinic.net");
+    whois_ip_add_mapping("160.216.0.0/14", "whois.ripe.net");
+    whois_ip_add_mapping("160.220.0.0/16", "whois.ripe.net");
+    whois_ip_add_mapping("160.44.0.0/14", "whois.ripe.net");
+    whois_ip_add_mapping("160.48.0.0/12", "whois.ripe.net");
+    whois_ip_add_mapping("160.115.0.0/16", "whois.afrinic.net");
+    whois_ip_add_mapping("160.116.0.0/14", "whois.afrinic.net");
+    whois_ip_add_mapping("160.120.0.0/14", "whois.afrinic.net");
+    whois_ip_add_mapping("160.124.0.0/16", "whois.afrinic.net");
+    whois_ip_add_mapping("163.156.0.0/14", "whois.ripe.net");
+    whois_ip_add_mapping("163.160.0.0/12", "whois.ripe.net");
+    whois_ip_add_mapping("163.195.0.0/16", "whois.afrinic.net");
+    whois_ip_add_mapping("163.196.0.0/14", "whois.afrinic.net");
+    whois_ip_add_mapping("163.200.0.0/14", "whois.afrinic.net");
+    whois_ip_add_mapping("163.0.0.0/8", "whois.apnic.net");
+    whois_ip_add_mapping("164.0.0.0/11", "whois.ripe.net");
+    whois_ip_add_mapping("164.32.0.0/13", "whois.ripe.net");
+    whois_ip_add_mapping("164.40.0.0/16", "whois.ripe.net");
+    whois_ip_add_mapping("164.128.0.0/12", "whois.ripe.net");
+    whois_ip_add_mapping("164.146.0.0/15", "whois.afrinic.net");
+    whois_ip_add_mapping("164.148.0.0/14", "whois.afrinic.net");
+    whois_ip_add_mapping("165.143.0.0/16", "whois.afrinic.net");
+    whois_ip_add_mapping("165.144.0.0/14", "whois.afrinic.net");
+    whois_ip_add_mapping("165.148.0.0/15", "whois.afrinic.net");
+    whois_ip_add_mapping("169.208.0.0/12", "whois.apnic.net");
+    whois_ip_add_mapping("171.16.0.0/12", "whois.ripe.net");
+    whois_ip_add_mapping("171.32.0.0/15", "whois.ripe.net");
+    whois_ip_add_mapping("171.0.0.0/8", "whois.apnic.net");
+    whois_ip_add_mapping("175.192.0.0/10", "whois.nic.or.kr");
+    whois_ip_add_mapping("175.0.0.0/8", "whois.apnic.net");
+    whois_ip_add_mapping("176.0.0.0/8", "whois.ripe.net");
+    whois_ip_add_mapping("177.0.0.0/8", "whois.lacnic.net");
+    whois_ip_add_mapping("178.0.0.0/8", "whois.ripe.net");
+    whois_ip_add_mapping("179.0.0.0/8", "whois.lacnic.net");
+    whois_ip_add_mapping("180.0.0.0/8", "whois.apnic.net");
+    whois_ip_add_mapping("181.0.0.0/8", "whois.lacnic.net");
+    whois_ip_add_mapping("183.96.0.0/11", "whois.nic.or.kr");
+    whois_ip_add_mapping("182.0.0.0/7", "whois.apnic.net");
+    whois_ip_add_mapping("185.0.0.0/8", "whois.ripe.net");
+    whois_ip_add_mapping("186.0.0.0/7", "whois.lacnic.net");
+    whois_ip_add_mapping("188.0.0.0/8", "whois.ripe.net");
+    whois_ip_add_mapping("189.0.0.0/8", "whois.lacnic.net");
+    whois_ip_add_mapping("190.0.0.0/7", "whois.lacnic.net");
+    whois_ip_add_mapping("128.0.0.0/2", "whois.arin.net");
+    whois_ip_add_mapping("192.71.0.0/16", "whois.ripe.net");
+    whois_ip_add_mapping("192.72.253.0/24", "whois.arin.net");
+    whois_ip_add_mapping("192.72.254.0/24", "whois.arin.net");
+    whois_ip_add_mapping("192.72.0.0/16", "whois.apnic.net");
+    whois_ip_add_mapping("192.106.0.0/16", "whois.ripe.net");
+    whois_ip_add_mapping("192.114.0.0/15", "whois.ripe.net");
+    whois_ip_add_mapping("192.116.0.0/15", "whois.ripe.net");
+    whois_ip_add_mapping("192.118.0.0/16", "whois.ripe.net");
+    whois_ip_add_mapping("192.162.0.0/16", "whois.ripe.net");
+    whois_ip_add_mapping("192.164.0.0/14", "whois.ripe.net");
+    whois_ip_add_mapping("192.0.0.0/8", "whois.arin.net");
+    whois_ip_add_mapping("193.0.0.0/8", "whois.ripe.net");
+    whois_ip_add_mapping("194.0.0.0/7", "whois.ripe.net");
+    whois_ip_add_mapping("196.0.0.0/7", "whois.afrinic.net");
+    whois_ip_add_mapping("198.0.0.0/7", "whois.arin.net");
+    whois_ip_add_mapping("200.0.0.0/7", "whois.lacnic.net");
+    whois_ip_add_mapping("202.11.0.0/16", "whois.nic.ad.jp");
+    whois_ip_add_mapping("202.13.0.0/16", "whois.nic.ad.jp");
+    whois_ip_add_mapping("202.15.0.0/16", "whois.nic.ad.jp");
+    whois_ip_add_mapping("202.16.0.0/14", "whois.nic.ad.jp");
+    whois_ip_add_mapping("202.20.128.0/17", "whois.nic.or.kr");
+    whois_ip_add_mapping("202.23.0.0/16", "whois.nic.ad.jp");
+    whois_ip_add_mapping("202.24.0.0/15", "whois.nic.ad.jp");
+    whois_ip_add_mapping("202.26.0.0/16", "whois.nic.ad.jp");
+    whois_ip_add_mapping("202.30.0.0/15", "whois.nic.or.kr");
+    whois_ip_add_mapping("202.32.0.0/14", "whois.nic.ad.jp");
+    whois_ip_add_mapping("202.48.0.0/16", "whois.nic.ad.jp");
+    whois_ip_add_mapping("202.39.128.0/17", "whois.twnic.net");
+    whois_ip_add_mapping("202.208.0.0/12", "whois.nic.ad.jp");
+    whois_ip_add_mapping("202.224.0.0/11", "whois.nic.ad.jp");
+    whois_ip_add_mapping("203.0.0.0/10", "whois.apnic.net");
+    whois_ip_add_mapping("203.66.0.0/16", "whois.twnic.net");
+    whois_ip_add_mapping("203.69.0.0/16", "whois.twnic.net");
+    whois_ip_add_mapping("203.74.0.0/15", "whois.twnic.net");
+    whois_ip_add_mapping("203.136.0.0/14", "whois.nic.ad.jp");
+    whois_ip_add_mapping("203.140.0.0/15", "whois.nic.ad.jp");
+    whois_ip_add_mapping("203.178.0.0/15", "whois.nic.ad.jp");
+    whois_ip_add_mapping("203.180.0.0/14", "whois.nic.ad.jp");
+    whois_ip_add_mapping("203.224.0.0/11", "whois.nic.or.kr");
+    whois_ip_add_mapping("202.0.0.0/7", "whois.apnic.net");
+    whois_ip_add_mapping("204.0.0.0/14", "rwhois.gin.ntt.net");
+    whois_ip_add_mapping("204.0.0.0/6", "whois.arin.net");
+    whois_ip_add_mapping("208.0.0.0/7", "whois.arin.net");
+    whois_ip_add_mapping("209.94.192.0/19", "whois.lacnic.net");
+    whois_ip_add_mapping("210.59.128.0/17", "whois.twnic.net");
+    whois_ip_add_mapping("210.61.0.0/16", "whois.twnic.net");
+    whois_ip_add_mapping("210.62.252.0/22", "whois.twnic.net");
+    whois_ip_add_mapping("210.65.0.0/16", "whois.twnic.net");
+    whois_ip_add_mapping("210.71.128.0/17", "whois.twnic.net");
+    whois_ip_add_mapping("210.90.0.0/15", "whois.nic.or.kr");
+    whois_ip_add_mapping("210.92.0.0/14", "whois.nic.or.kr");
+    whois_ip_add_mapping("210.96.0.0/11", "whois.nic.or.kr");
+    whois_ip_add_mapping("210.128.0.0/11", "whois.nic.ad.jp");
+    whois_ip_add_mapping("210.160.0.0/12", "whois.nic.ad.jp");
+    whois_ip_add_mapping("210.178.0.0/15", "whois.nic.or.kr");
+    whois_ip_add_mapping("210.180.0.0/14", "whois.nic.or.kr");
+    whois_ip_add_mapping("210.188.0.0/14", "whois.nic.ad.jp");
+    whois_ip_add_mapping("210.196.0.0/14", "whois.nic.ad.jp");
+    whois_ip_add_mapping("210.204.0.0/14", "whois.nic.or.kr");
+    whois_ip_add_mapping("210.216.0.0/13", "whois.nic.or.kr");
+    whois_ip_add_mapping("210.224.0.0/12", "whois.nic.ad.jp");
+    whois_ip_add_mapping("210.240.0.0/16", "whois.twnic.net");
+    whois_ip_add_mapping("210.241.0.0/18", "whois.twnic.net");
+    whois_ip_add_mapping("210.241.224.0/19", "whois.twnic.net");
+    whois_ip_add_mapping("210.242.0.0/15", "whois.twnic.net");
+    whois_ip_add_mapping("210.248.0.0/13", "whois.nic.ad.jp");
+    whois_ip_add_mapping("211.0.0.0/12", "whois.nic.ad.jp");
+    whois_ip_add_mapping("211.16.0.0/14", "whois.nic.ad.jp");
+    whois_ip_add_mapping("211.20.0.0/15", "whois.twnic.net");
+    whois_ip_add_mapping("211.22.0.0/16", "whois.twnic.net");
+    whois_ip_add_mapping("211.32.0.0/11", "whois.nic.or.kr");
+    whois_ip_add_mapping("211.75.0.0/16", "whois.twnic.net");
+    whois_ip_add_mapping("211.72.0.0/16", "whois.twnic.net");
+    whois_ip_add_mapping("211.104.0.0/13", "whois.nic.or.kr");
+    whois_ip_add_mapping("211.112.0.0/13", "whois.nic.or.kr");
+    whois_ip_add_mapping("211.120.0.0/13", "whois.nic.ad.jp");
+    whois_ip_add_mapping("211.128.0.0/13", "whois.nic.ad.jp");
+    whois_ip_add_mapping("211.168.0.0/13", "whois.nic.or.kr");
+    whois_ip_add_mapping("211.176.0.0/12", "whois.nic.or.kr");
+    whois_ip_add_mapping("211.192.0.0/10", "whois.nic.or.kr");
+    whois_ip_add_mapping("210.0.0.0/7", "whois.apnic.net");
+    whois_ip_add_mapping("213.154.32.0/19", "whois.afrinic.net");
+    whois_ip_add_mapping("213.154.64.0/19", "whois.afrinic.net");
+    whois_ip_add_mapping("212.0.0.0/7", "whois.ripe.net");
+    whois_ip_add_mapping("214.0.0.0/7", "whois.arin.net");
+    whois_ip_add_mapping("216.0.0.0/8", "whois.arin.net");
+    whois_ip_add_mapping("217.0.0.0/8", "whois.ripe.net");
+    whois_ip_add_mapping("218.36.0.0/14", "whois.nic.or.kr");
+    whois_ip_add_mapping("218.40.0.0/13", "whois.nic.ad.jp");
+    whois_ip_add_mapping("218.48.0.0/13", "whois.nic.or.kr");
+    whois_ip_add_mapping("219.96.0.0/11", "whois.nic.ad.jp");
+    whois_ip_add_mapping("218.144.0.0/12", "whois.nic.or.kr");
+    whois_ip_add_mapping("218.160.0.0/12", "whois.twnic.net");
+    whois_ip_add_mapping("218.216.0.0/13", "whois.nic.ad.jp");
+    whois_ip_add_mapping("218.224.0.0/13", "whois.nic.ad.jp");
+    whois_ip_add_mapping("218.232.0.0/13", "whois.nic.or.kr");
+    whois_ip_add_mapping("219.240.0.0/15", "whois.nic.or.kr");
+    whois_ip_add_mapping("219.248.0.0/13", "whois.nic.or.kr");
+    whois_ip_add_mapping("218.0.0.0/7", "whois.apnic.net");
+    whois_ip_add_mapping("220.64.0.0/11", "whois.nic.or.kr");
+    whois_ip_add_mapping("220.96.0.0/14", "whois.nic.ad.jp");
+    whois_ip_add_mapping("220.103.0.0/16", "whois.nic.or.kr");
+    whois_ip_add_mapping("220.104.0.0/13", "whois.nic.ad.jp");
+    whois_ip_add_mapping("220.149.0.0/16", "whois.nic.or.kr");
+    whois_ip_add_mapping("221.138.0.0/15", "whois.nic.or.kr");
+    whois_ip_add_mapping("221.140.0.0/14", "whois.nic.or.kr");
+    whois_ip_add_mapping("221.144.0.0/12", "whois.nic.or.kr");
+    whois_ip_add_mapping("221.160.0.0/13", "whois.nic.or.kr");
+    whois_ip_add_mapping("222.96.0.0/12", "whois.nic.or.kr");
+    whois_ip_add_mapping("222.112.0.0/13", "whois.nic.or.kr");
+    whois_ip_add_mapping("222.120.0.0/15", "whois.nic.or.kr");
+    whois_ip_add_mapping("222.122.0.0/16", "whois.nic.or.kr");
+    whois_ip_add_mapping("222.232.0.0/13", "whois.nic.or.kr");
+    whois_ip_add_mapping("220.0.0.0/6", "whois.apnic.net");
+    whois_ip_add_mapping("2001:0000::/32", "whois.teredo.net");
+    whois_ip_add_mapping("2001:0200::/23", "whois.apnic.net");
+    whois_ip_add_mapping("2001:0400::/23", "whois.arin.net");
+    whois_ip_add_mapping("2001:0600::/23", "whois.ripe.net");
+    whois_ip_add_mapping("2001:0800::/22", "whois.ripe.net");
+    whois_ip_add_mapping("2001:0C00::/22", "whois.apnic.net");
+    whois_ip_add_mapping("2001:1000::/22", "whois.lacnic.net");
+    whois_ip_add_mapping("2001:1400::/22", "whois.ripe.net");
+    whois_ip_add_mapping("2001:1800::/23", "whois.arin.net");
+    whois_ip_add_mapping("2001:1A00::/23", "whois.ripe.net");
+    whois_ip_add_mapping("2001:1C00::/22", "whois.ripe.net");
+    whois_ip_add_mapping("2001:2000::/19", "whois.ripe.net");
+    whois_ip_add_mapping("2001:4000::/23", "whois.ripe.net");
+    whois_ip_add_mapping("2001:4200::/23", "whois.afrinic.net");
+    whois_ip_add_mapping("2001:4400::/23", "whois.apnic.net");
+    whois_ip_add_mapping("2001:4600::/23", "whois.ripe.net");
+    whois_ip_add_mapping("2001:4800::/23", "whois.arin.net");
+    whois_ip_add_mapping("2001:4A00::/23", "whois.ripe.net");
+    whois_ip_add_mapping("2001:4C00::/22", "whois.ripe.net");
+    whois_ip_add_mapping("2001:5000::/20", "whois.ripe.net");
+    whois_ip_add_mapping("2001:8000::/18", "whois.apnic.net");
+    whois_ip_add_mapping("2002:0000::/16", "whois.6to4.net");
+    whois_ip_add_mapping("2003:0000::/18", "whois.ripe.net");
+    whois_ip_add_mapping("2400:0000::/20", "whois.nic.or.kr");
+    whois_ip_add_mapping("2400:0000::/12", "whois.apnic.net");
+    whois_ip_add_mapping("2600:0000::/12", "whois.arin.net");
+    whois_ip_add_mapping("2610:0000::/23", "whois.arin.net");
+    whois_ip_add_mapping("2620:0000::/23", "whois.arin.net");
+    whois_ip_add_mapping("2630:0000::/12", "whois.arin.net");
+    whois_ip_add_mapping("2800:0000::/12", "whois.lacnic.net");
+    whois_ip_add_mapping("2A00:0000::/12", "whois.ripe.net");
+    whois_ip_add_mapping("2A10:0000::/12", "whois.ripe.net");
+    whois_ip_add_mapping("2C00:0000::/12", "whois.afrinic.net");
+}
+
+char* whois_ip_lookup(char* cidr) {
+    char buf[16];
+    size_t len;
+    uint32_t preflen;
+    char* result = NULL;
+
+    if (!lpm_whois) {
+        return WHOIS_FALLBACK;
+    }
+
+    if (0 != lpm_strtobin(cidr, buf, &len, &preflen)) {
+        return WHOIS_FALLBACK;
+    }
+
+    result = lpm_lookup(lpm_whois, buf, len);
+    if (result) {
+        return result;
+    }
+
+    return WHOIS_FALLBACK;
+}
