@@ -2,8 +2,6 @@
 #include <stdio.h>
 
 int main() {
-    whois_ip_init();
-
     printf("\nIP\n");
     printf("%s\n", whois_ip_lookup("8.8.8.8"));
     printf("%s\n", whois_ip_lookup("114.114.114.114"));

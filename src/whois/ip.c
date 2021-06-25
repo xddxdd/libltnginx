@@ -21,7 +21,7 @@ static inline void whois_ip_add_mapping(const char *cidr, char *server) {
     }
 }
 
-void whois_ip_init(void) {
+static void __attribute__((constructor)) whois_ip_init(void) {
     lpm_whois = lpm_create();
     whois_ip_add_mapping("1.0.0.0/8", "whois.apnic.net");
     whois_ip_add_mapping("2.0.0.0/8", "whois.ripe.net");
